@@ -57,17 +57,20 @@ namespace FasterTransition
             //__instance.UpdateFade(Game1.currentGameTime);
             //return false;
 
-            __instance.fadeToBlack = false;
+            __instance.fadeToBlack = true;
             __instance.fadeIn = false;
             if (stopMovement)
                 Game1.player.CanMove = false;
-            __instance.fadeToBlackAlpha = 0f;
 
             IReflectedField<Func<bool>> onFadeToBlackComplete = SHelper.Reflection.GetField<Func<bool>>(__instance, "onFadeToBlackComplete");
             onFadeToBlackComplete.GetValue()?.Invoke();
-            IReflectedField<Game1.afterFadeFunction> afterFade = SHelper.Reflection.GetField<Game1.afterFadeFunction>(__instance, "afterFade");
-            afterFade.GetValue()?.Invoke();
-            afterFade.SetValue(null);
+            IReflectedField<Game1.afterFadeFunction> afterFadeField = SHelper.Reflection.GetField<Game1.afterFadeFunction>(__instance, "afterFade");
+            Game1.afterFadeFunction afterFade = afterFadeField.GetValue();
+            afterFadeField.SetValue(null);
+            afterFade?.Invoke();
+            __instance.globalFade = false;
+            __instance.fadeToBlack = false;
+            __instance.fadeToBlackAlpha = 0f;
             IReflectedField<Action> onFadedBackInComplete = SHelper.Reflection.GetField<Action>(__instance, "onFadedBackInComplete");
             onFadedBackInComplete.GetValue()?.Invoke();
             return false;
