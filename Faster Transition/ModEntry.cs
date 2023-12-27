@@ -24,7 +24,6 @@ namespace FasterTransition
             SHelper = Helper;
             var harmony = new Harmony(ModManifest.UniqueID);
 
-
             // TODO:: Add support for global fade
             harmony.Patch(
                original: AccessTools.Method(typeof(ScreenFade), nameof(ScreenFade.UpdateFadeAlpha)),
@@ -35,7 +34,6 @@ namespace FasterTransition
                original: AccessTools.Method(typeof(ScreenFade), nameof(ScreenFade.FadeScreenToBlack)),
                prefix: new HarmonyMethod(typeof(ModEntry), nameof(ModEntry.FadeScreenToBlack_prefix))
             );
-
 
             Helper.Events.GameLoop.GameLaunched += OnGameLaunched;
         }
