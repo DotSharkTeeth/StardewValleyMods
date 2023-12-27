@@ -35,6 +35,7 @@ namespace FasterTransition
                 Game1.delayedActions.Count > 0 ||
                 !(Game1.pauseTime == 0.0 || Game1.eventUp) ||
                 Game1.viewportFreeze ||
+                Game1.killScreen ||
                 Game1.IsFakedBlackScreen()
 
             //(Game1.viewport.X == -1000 && Game1.viewport.Y == -1000)
