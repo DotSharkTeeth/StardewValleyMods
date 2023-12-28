@@ -36,9 +36,8 @@ namespace RightClickUntillSoil
             if (!Context.IsWorldReady)
                 return;
                 
-            if (e.Button == SButton.MouseRight && IsHoldingHoe() && !Game1.player.UsingTool)
+            if (e.Button == SButton.MouseRight && IsHoldingHoe() && !Game1.player.IsBusyDoingSomething())
             {
-
                 //this.Monitor.Log($"{Game1.player.getTileLocation()}:{Game1.currentCursorTile}:{IsHoeDirt(Game1.currentCursorTile)}", LogLevel.Debug);
                 
                 if(IsHoeDirt(Game1.currentCursorTile)) {
@@ -47,8 +46,11 @@ namespace RightClickUntillSoil
                     var dir = Utility.getDirectionFromChange(Game1.currentCursorTile, Game1.player.getTileLocation());
                     Game1.player.faceDirection(dir);
                     Game1.player.UsingTool = true;
+                    Game1.player.CanMove = false;
+                    Game1.player.freezePause = 500;
                     AnimatedSprite.endOfAnimationBehavior endOfBehaviorFunction = new AnimatedSprite.endOfAnimationBehavior((who) => {
                         who.UsingTool = false;
+                        who.CanMove = true;
                     });
                     Game1.player.FarmerSprite.animateOnce(295 + dir, 100, 0, endOfBehaviorFunction);
                     Game1.currentLocation.terrainFeatures.Remove(Game1.currentCursorTile);
@@ -57,7 +59,7 @@ namespace RightClickUntillSoil
         }
         private static bool IsHoldingHoe()
         {
-            return Game1.player.CurrentTool is Hoe;
+            return !Game1.player.UsingTool && Game1.player.CurrentTool is Hoe;
         }
         private static bool IsHoeDirt(Vector2 tile)
         {
