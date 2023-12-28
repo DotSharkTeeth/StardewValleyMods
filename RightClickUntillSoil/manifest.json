@@ -1,7 +1,7 @@
 {
     "Name": "Right Click Untill Soil",
     "Author": "Kumagabear",
-    "Version": "1.0.2",
+    "Version": "1.0.3",
     "Description": "Right click to untill soil with hoe",
     "UniqueID": "Kumagabear.RightClickUntillSoil",
     "EntryDll": "RightClickUntillSoil.dll",
