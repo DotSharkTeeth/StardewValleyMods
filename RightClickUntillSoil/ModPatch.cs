@@ -21,12 +21,9 @@ namespace RightClickUntillSoil
             Game1.player.faceDirection(dir);
             Game1.player.UsingTool = true;
             Game1.player.CanMove = false;
-            Game1.player.freezePause = 500;
-            AnimatedSprite.endOfAnimationBehavior endOfBehaviorFunction = new AnimatedSprite.endOfAnimationBehavior((who) => {
-                who.UsingTool = false;
-                who.CanMove = true;
-            });
-            Game1.player.FarmerSprite.animateOnce(295 + dir, 100, 0, endOfBehaviorFunction);
+            Game1.player.freezePause = (int)(420 *Config.ToolSpeed);
+            AnimatePlayer(dir);
+            //Game1.player.FarmerSprite.animateOnce(295 + dir, Config.ToolSpeed/5, 0, endOfBehaviorFunction);
             Game1.currentLocation.terrainFeatures.Remove(UseToolLocation);
 
             __result = false;
@@ -45,6 +42,55 @@ namespace RightClickUntillSoil
         public static Vector2 ToolTile
         {
             get => new Vector2((int)(Game1.player.GetToolLocation().X / Game1.tileSize), (int)(Game1.player.GetToolLocation().Y / Game1.tileSize));
+        }
+
+        public static void AnimatePlayer(int direction) {
+            AnimatedSprite.endOfAnimationBehavior endOfBehaviorFunction = new AnimatedSprite.endOfAnimationBehavior((who) => {
+                who.UsingTool = false;
+                who.CanMove = true;
+            });
+            switch (direction) {
+                case 0:
+                    Game1.player.FarmerSprite.animateOnce(new[]
+                    {
+                        new FarmerSprite.AnimationFrame(66, (int)(150 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(67, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(68, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(69, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(70, (int)(150 * Config.ToolSpeed), false, false, endOfBehaviorFunction, true),
+                    });
+                    break;
+                case 1:
+                    Game1.player.FarmerSprite.animateOnce(new[]
+                    {
+                        new FarmerSprite.AnimationFrame(48, (int)(150 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(49, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(50, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(51, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(52, (int)(150 * Config.ToolSpeed), false, false, endOfBehaviorFunction, true),
+                    });
+                    break;
+                case 2:
+                    Game1.player.FarmerSprite.animateOnce(new[]
+                    {
+                        new FarmerSprite.AnimationFrame(66, (int)(150 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(67, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(68, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(69, (int)(40 * Config.ToolSpeed), false, false),
+                        new FarmerSprite.AnimationFrame(70, (int)(75 * Config.ToolSpeed), false, false, endOfBehaviorFunction, true),
+                    });
+                    break;
+                case 3:
+                    Game1.player.FarmerSprite.animateOnce(new[]
+                    {
+                        new FarmerSprite.AnimationFrame(48, (int)(150 * Config.ToolSpeed), false, true),
+                        new FarmerSprite.AnimationFrame(49, (int)(40 * Config.ToolSpeed), false, true),
+                        new FarmerSprite.AnimationFrame(50, (int)(40 * Config.ToolSpeed), false, true),
+                        new FarmerSprite.AnimationFrame(51, (int)(40 * Config.ToolSpeed), false, true),
+                        new FarmerSprite.AnimationFrame(52, (int)(150 * Config.ToolSpeed), false, true, endOfBehaviorFunction, true),
+                    });
+                    break;
+            }
         }
         
     }

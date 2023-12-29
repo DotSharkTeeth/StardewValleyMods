@@ -65,10 +65,18 @@ namespace RightClickUntillSoil
 
             configMenu.AddNumberOption(
                 mod: this.ModManifest,
-                name: () => "Tool radius",
-                tooltip: () => "Tool radius",
+                name: () => "Tool Radius",
+                tooltip: () => "Tool Radius",
                 getValue: () => Config.ToolRadius,
                 setValue: value => Config.ToolRadius = value
+            );
+
+            configMenu.AddNumberOption(
+                mod: this.ModManifest,
+                name: () => "Tool Speed",
+                tooltip: () => "Tool Speed",
+                getValue: () => Config.ToolSpeed,
+                setValue: value => Config.ToolSpeed = value
             );
         }
     }
