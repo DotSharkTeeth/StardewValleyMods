@@ -1,16 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
-using StardewValley.TerrainFeatures;
-using StardewValley.Tools;
+﻿using Microsoft.Xna.Framework;
 using StardewValley;
-using System.Reflection;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Locations;
-using HarmonyLib;
-using Netcode;
+
 
 namespace RightClickUntillSoil
 {
@@ -18,13 +8,13 @@ namespace RightClickUntillSoil
     {
         public static void Game1pressActionButton_postfix(ref bool __result)
         {
-            
-            if (!__result || !IsHoldingHoe() || !IsHoeDirt(Game1.currentCursorTile) || !Game1.didPlayerJustRightClick(true))
+
+            if (!__result || !IsHoldingHoe() ||!Game1.didPlayerJustRightClick() || !IsWithinRadius || !IsHoeDirt(UseToolLocation))
                 return;
 
             Game1.currentLocation.playSound("woodyHit");
             Game1.player.stopJittering();
-            var dir = Utility.getDirectionFromChange(Game1.currentCursorTile, Game1.player.getTileLocation());
+            var dir = Utility.getDirectionFromChange(UseToolLocation, Game1.player.getTileLocation());
             if (dir == -1) {
                 dir = Game1.player.FacingDirection;
             }
@@ -37,9 +27,24 @@ namespace RightClickUntillSoil
                 who.CanMove = true;
             });
             Game1.player.FarmerSprite.animateOnce(295 + dir, 100, 0, endOfBehaviorFunction);
-            Game1.currentLocation.terrainFeatures.Remove(Game1.currentCursorTile);
+            Game1.currentLocation.terrainFeatures.Remove(UseToolLocation);
 
             __result = false;
+        }
+
+        public static bool IsWithinRadius
+        {
+            get => Utility.tileWithinRadiusOfPlayer((int)UseToolLocation.X, (int)UseToolLocation.Y, Config.ToolRadius, Game1.player);
+        }
+
+        public static Vector2 UseToolLocation 
+        {
+            get => Config.UseToolLocation ? ToolTile : Game1.currentCursorTile;
+        }
+
+        public static Vector2 ToolTile
+        {
+            get => new Vector2((int)(Game1.player.GetToolLocation().X / Game1.tileSize), (int)(Game1.player.GetToolLocation().Y / Game1.tileSize));
         }
         
     }
