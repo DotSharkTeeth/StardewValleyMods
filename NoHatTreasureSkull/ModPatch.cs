@@ -24,10 +24,10 @@ namespace NoHatTreasureSkull
 
             (Vector2, int)[] itemObjects = new[]
             {
-                (Vector2.Zero, 21),
-                (Vector2.Zero, 25),
-                (Vector2.Zero, 165),
-                (Vector2.Zero, 272)
+                (Vector2.Zero, 21), // Crystalarium
+                (Vector2.Zero, 25), // Seed Maker
+                (Vector2.Zero, 165), // Auto Grabber
+                (Vector2.Zero, 272) // Autopetter
             };
             int randomIndex = Game1.random.Next(itemObjects.Length);
             __result = new StardewValley.Object(itemObjects[randomIndex].Item1, itemObjects[randomIndex].Item2);
@@ -35,11 +35,9 @@ namespace NoHatTreasureSkull
         }
 
         // Always Treasure room
-        
         public static void MineShaftaddLevelChests_prefix(MineShaft __instance)
         {
             SHelper.Reflection.GetField<NetBool>(__instance, "netIsTreasureRoom").GetValue().Value = true;
-            //__instance.netIsTreasureRoom.Value = true
         }
     }
 }
