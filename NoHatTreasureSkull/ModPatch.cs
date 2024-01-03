@@ -11,27 +11,77 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 using HarmonyLib;
 using Netcode;
+using System.Collections.Generic;
 
 namespace NoHatTreasureSkull
 {
     public partial class ModEntry
     {
+        public enum ConfigItem {
+            Bomb,
+            Machine,
+            Medicine,
+            Sapling,
+            Seed
+        }
         public static void MineShaftGetTreasureRoomItem_postfix(ref Item __result)
         {
             
-            if (__result.Category != -95)
+            if (!Config.Enable || __result.Category != -95)
                 return;
 
-            (Vector2, int)[] itemObjects = new[]
-            {
-                (Vector2.Zero, 21), // Crystalarium
-                (Vector2.Zero, 25), // Seed Maker
-                (Vector2.Zero, 165), // Auto Grabber
-                (Vector2.Zero, 272) // Autopetter
-            };
-            int randomIndex = Game1.random.Next(itemObjects.Length);
-            __result = new StardewValley.Object(itemObjects[randomIndex].Item1, itemObjects[randomIndex].Item2);
+            List<ConfigItem> configItems = GetConfigItems;
+            if (configItems.Count == 0)
+                return;
 
+            StardewValley.Object newItem = null;
+
+            switch(configItems[Game1.random.Next(configItems.Count)]) {
+                case ConfigItem.Bomb:
+                    newItem = new StardewValley.Object(Game1.random.Next(286, 288), Game1.random.Next(1, 5) * 5);
+                    break;
+                case ConfigItem.Machine:
+                    (Vector2, int)[] itemObjects = new[]
+                    {
+                        (Vector2.Zero, 21), // Crystalarium
+                        (Vector2.Zero, 25), // Seed Maker
+                        (Vector2.Zero, 165), // Auto Grabber
+                        (Vector2.Zero, 272) // Auto Petter
+                    };
+                    int randomIndex = Game1.random.Next(itemObjects.Length);
+                    newItem = new StardewValley.Object(itemObjects[randomIndex].Item1, itemObjects[randomIndex].Item2);
+                    break;
+                case ConfigItem.Medicine:
+                    int[] medicine = { 773, 349 };
+                    newItem = new StardewValley.Object(medicine[Game1.random.Next(medicine.Length)], Game1.random.Next(2, 5));
+                    break;
+                case ConfigItem.Sapling:
+                    newItem = new StardewValley.Object(Game1.random.Next(628, 634), 1);
+                    break;
+                case ConfigItem.Seed:
+                    newItem = new StardewValley.Object(Game1.random.Next(472, 499), Game1.random.Next(1, 5) * 5);
+                    break;
+            }
+            __result = newItem;
+
+        }
+
+       
+        public static List<ConfigItem> GetConfigItems {
+            get {
+                List<ConfigItem> list = new List<ConfigItem>();
+                if (Config.EnableBomb)
+                    list.Add(ConfigItem.Bomb);
+                if (Config.EnableMachine)
+                    list.Add(ConfigItem.Machine);
+                if (Config.EnableMedicine)
+                    list.Add(ConfigItem.Medicine);
+                if (Config.EnableSapling)
+                    list.Add(ConfigItem.Sapling);
+                if (Config.EnableSeed)
+                    list.Add(ConfigItem.Seed);
+                return list;
+            }
         }
 
         // Always Treasure room
@@ -39,5 +89,6 @@ namespace NoHatTreasureSkull
         {
             SHelper.Reflection.GetField<NetBool>(__instance, "netIsTreasureRoom").GetValue().Value = true;
         }
+
     }
 }
