@@ -1,7 +1,7 @@
 {
     "Name": "Faster Transition",
     "Author": "Kumagabear",
-    "Version": "1.0.1",
+    "Version": "1.0.2",
     "Description": "Faster Transition",
     "UniqueID": "Kumagabear.FasterTransition",
     "EntryDll": "FasterTransition.dll",
